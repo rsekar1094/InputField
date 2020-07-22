@@ -1,0 +1,20 @@
+PODS:
+  - AMPopTip (4.5.0)
+  - Gridicons (1.0.1)
+
+DEPENDENCIES:
+  - AMPopTip
+  - Gridicons
+
+SPEC REPOS:
+  https://cdn.cocoapods.org/:
+    - AMPopTip
+    - Gridicons
+
+SPEC CHECKSUMS:
+  AMPopTip: e0ed2967892b18d1e55505c015fa06e535003fdc
+  Gridicons: 8e19276b20bb15d1fda1d4d0db96d066d170135b
+
+PODFILE CHECKSUM: 10cabb00c4263c51a6ebc899a014c5024fb77f93
+
+COCOAPODS: 1.8.4
