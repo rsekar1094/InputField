@@ -31,8 +31,13 @@ open class AppPasswordTextField: AppTextField {
     
     override func getConstraints() -> [NSLayoutConstraint] {
         var constraints = super.getConstraints()
-        constraints.append(showPasswordView.widthAnchor.constraint(equalToConstant: 20))
-        constraints.append(showPasswordView.heightAnchor.constraint(equalToConstant: 20))
+        let widthConstraint = showPasswordView.widthAnchor.constraint(equalToConstant: 20)
+        widthConstraint.priority = UILayoutPriority.init(900)
+        constraints.append(widthConstraint)
+        
+        let heightConstraint = showPasswordView.heightAnchor.constraint(equalToConstant: 20)
+        heightConstraint.priority = UILayoutPriority.init(900)
+        constraints.append(heightConstraint)
         return constraints
     }
     
@@ -54,4 +59,8 @@ open class AppPasswordTextField: AppTextField {
         }
     }
     
+    override public func update(textColor : UIColor) {
+        super.update(textColor: textColor)
+        self.showPasswordView.tintColor = textColor
+    }
 }

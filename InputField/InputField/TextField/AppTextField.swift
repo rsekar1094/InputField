@@ -10,12 +10,10 @@ import UIKit
 
 // MARK: - AppTextFieldProtocol
 public protocol AppTextFieldProtocol : AppInputFieldProtocol {
-    func didTextChange(textField : UITextField,text : String)
-    func isValid(textField : UITextField,text : String) -> (Bool,String?) // (valid,errorMessage)
-    func shouldEndEditing(textField : UITextField) -> Bool
-    func shouldReturn(textField : UITextField) -> Bool
-    
-    var needToShowTickOrCross : Bool { get }
+    func didTextChange(inputField : AppTextField,text : String)
+    func isValid(inputField : AppTextField,text : String) -> (Bool,String?) // (valid,errorMessage)
+    func shouldEndEditing(inputField : AppTextField) -> Bool
+    func shouldReturn(inputField : AppTextField) -> Bool
 }
 
 extension AppTextFieldProtocol {
@@ -26,8 +24,6 @@ extension AppTextFieldProtocol {
     func shouldReturn(textField : UITextField) -> Bool {
          return true
     }
-    
-    var needToShowTickOrCross : Bool { return true }
 }
 
 // MARK: - AppTextField
@@ -83,16 +79,15 @@ open class AppTextField : AppInputField,UITextFieldDelegate {
         }
     }
     
-    public var isOptional : Bool = false
-    
-    
     override var isValid : Bool {
         if let delegate = self.delegate {
-            return delegate.isValid(textField: self.textField, text: textField.text ?? "").0
+            return delegate.isValid(inputField : self, text: textField.text ?? "").0
         } else {
             return false
         }
     }
+    
+    override var isInputFocused : Bool { return textField.isFirstResponder }
     
     // MARK: - Override methods
     override func addSubViews() {
@@ -102,52 +97,67 @@ open class AppTextField : AppInputField,UITextFieldDelegate {
         containerView.addArrangedSubview(resultImageView)
     }
     
+    @discardableResult
+    open override func resignFirstResponder() -> Bool {
+        self.textField.resignFirstResponder()
+        return super.resignFirstResponder()
+    }
+    
+    @discardableResult
+    open override func becomeFirstResponder() -> Bool {
+        self.textField.becomeFirstResponder()
+        return true
+    }
+    
     override func getConstraints() -> [NSLayoutConstraint] {
         var constraints = super.getConstraints()
-        constraints.append(resultImageView.widthAnchor.constraint(equalToConstant: 25))
-        constraints.append(resultImageView.heightAnchor.constraint(equalToConstant: 25))
+        let widthConstraint = resultImageView.widthAnchor.constraint(equalToConstant: 20)
+        widthConstraint.priority = UILayoutPriority.init(900)
+        constraints.append(widthConstraint)
+        
+        let heightConstraint = resultImageView.heightAnchor.constraint(equalToConstant: 20)
+        heightConstraint.priority = UILayoutPriority.init(900)
+        constraints.append(heightConstraint)
         return constraints
     }
     
     override func additionalSetUp() {
         super.additionalSetUp()
         textField.delegate = self
-        updatePlaceholder(show : false,animate : false)
+        updatePlaceholder(showInTop : false,isValidationOn: false,isValid : false,animate : false)
+    }
+    
+    public override func prepareForReuse() {
+        super.prepareForReuse()
+        updatePlaceholder(showInTop: false,isValidationOn: false,isValid : false,animate : false)
     }
     
     @objc
     private func didTextChange(_ textField : UITextField) {
         let finalString = textField.text ?? ""
         if let delegate = self.delegate {
-            delegate.didTextChange(textField: textField,text : finalString)
-            let result = delegate.isValid(textField: textField, text: finalString)
-            if delegate.needToShowTickOrCross {
-                updateError(show: !result.0,errorMessage : result.1)
+            delegate.didTextChange(inputField: self,text : finalString)
+            if isValidationOn {
+                let result = delegate.isValid(inputField: self, text: finalString)
+                updateError(errorMessage : result.1,reloadIfNeed : true)
             }
         }
     }
     
     // MARK: - Configure methods
-    override func setPlacehoder(_ placehoder : String) {
-        super.setPlacehoder(placehoder)
-        if isOptional {
-            textField.placeholder = " \(placehoder) (\(NSLocalizedString("Optional", comment: "")))"
-        } else {
-            textField.placeholder = " \(placehoder) "
-        }
-    }
-    
-    private func updatePlaceholderView(currentText : String?) {
-        updatePlaceholder(show : !(currentText?.isEmpty ?? true))
+    private func updatePlaceholderView(isValid : Bool,isValidationOn : Bool,currentText : String?) {
+        updatePlaceholder(showInTop : !(currentText?.isEmpty ?? true) || isInputFocused,isValidationOn: isValidationOn,isValid : isValid)
     }
     
     // MARK: - UITextFieldDelegate
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        updatePlaceholder(show : true)
+        updatePlaceholder(showInTop : true,isValidationOn: isValidationOn,isValid : self.isValid)
+        updateborder(isValidationOn: isValidationOn, isValid: isValid)
     }
     
-    public func textFieldDidEndEditing(_ textField: UITextField) {
-        updatePlaceholderView(currentText : textField.text)
+    public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        updatePlaceholderView(isValid : self.isValid,isValidationOn : isValidationOn,currentText : textField.text)
+        updateborder(isValidationOn: isValidationOn, isValid: isValid)
     }
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -155,13 +165,8 @@ open class AppTextField : AppInputField,UITextFieldDelegate {
         if let textFieldString = textField.text {
             finalString = NSString(string: textFieldString).replacingCharacters(in: range, with: string)
         }
-        hideErrorTip()
-        updatePlaceholderView(currentText : finalString)
+        updatePlaceholderView(isValid : self.isValid,isValidationOn : isValidationOn,currentText : finalString)
         return true
-    }
-    
-    public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        updatePlaceholderView(currentText : textField.text)
     }
     
     public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -172,4 +177,8 @@ open class AppTextField : AppInputField,UITextFieldDelegate {
         return delegate?.shouldReturn(textField : textField) ?? true
     }
     
+    override public func update(textColor : UIColor) {
+        super.update(textColor: textColor)
+        self.textField.textColor = textColor
+    }
 }

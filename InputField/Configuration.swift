@@ -7,65 +7,54 @@
 //
 
 import UIKit
-open class Configuration {
-    let tintColor : UIColor
-    let textColor : UIColor
-    let parentViewColor : UIColor
-    let defaultBorderColor : UIColor
-    let errorColor : UIColor
-    let validColor : UIColor
-    
-    public init(tintColor : UIColor = UIColor.blue,
-                textColor : UIColor = UIColor.black,
-                parentViewColor : UIColor = UIColor.white,
-                defaultBorderColor : UIColor = UIColor.blue,
-                errorColor : UIColor = UIColor.red,
-                validColor : UIColor = UIColor.green) {
-        self.tintColor = tintColor
-        self.textColor = textColor
-        self.parentViewColor = parentViewColor
-        self.defaultBorderColor = defaultBorderColor
-        self.errorColor = errorColor
-        self.validColor = validColor
-    }
+
+public enum ErrorShowType : Int {
+    case inside
+    case outsideDownLeft
+    case outsideDownRight
 }
 
 
-open class ListConfiguration : Configuration {
-    let listUnSelectedColor : UIColor
+open class InputFieldConfiguration {
+    public var focusedColor : UIColor = UIColor.blue
+    public var unfocusedColor : UIColor = UIColor.black
     
-    public init(tintColor : UIColor = UIColor.blue,
-                textColor : UIColor = UIColor.black,
-                parentViewColor : UIColor = UIColor.white,
-                defaultBorderColor : UIColor = UIColor.blue,
-                errorColor : UIColor = UIColor.red,
-                validColor : UIColor = UIColor.green,
-                listUnSelectedColor : UIColor = UIColor.blue.withAlphaComponent(0.5)) {
+    public var textColor : UIColor = UIColor.black
+    public var parentViewColor : UIColor = UIColor.white
+    public var errorColor : UIColor = UIColor.red
+    public var validColor : UIColor = UIColor.green
+    public var errorShowType : ErrorShowType = .inside
+    
+    public var isOptional : Bool = false
+    public var placeholder : String = ""
+    
+    public var placeholderFont : UIFont = UIFont.systemFont(ofSize: 16, weight: .regular)
+    public var focusedPlaceholderFont : UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
+    public var placehoderColor : UIColor = UIColor.darkGray.withAlphaComponent(0.5)
+    
+    public init() {
+        
+    }
+    
+    
+}
+
+
+open class ListFieldConfiguration : InputFieldConfiguration {
+    public var listUnSelectedColor : UIColor
+    
+    public init(listUnSelectedColor : UIColor = UIColor.blue.withAlphaComponent(0.5)) {
         self.listUnSelectedColor = listUnSelectedColor
-        super.init(tintColor: tintColor,
-                   textColor : textColor,
-                   parentViewColor : parentViewColor,
-                   defaultBorderColor: defaultBorderColor,
-                   errorColor: errorColor, validColor: validColor)
+        super.init()
     }
     
 }
 
-open class PhoneConfiguration : Configuration {
-    let defaultCountryPhoneCode : String
+open class PhoneFieldConfiguration : InputFieldConfiguration {
+    public var defaultCountryPhoneCode : String
     
-    public init(tintColor : UIColor = UIColor.blue,
-                textColor : UIColor = UIColor.black,
-                parentViewColor : UIColor = UIColor.white,
-                defaultBorderColor : UIColor = UIColor.blue,
-                errorColor : UIColor = UIColor.red,
-                validColor : UIColor = UIColor.green,
-                defaultCountryPhoneCode : String) {
+    public init(defaultCountryPhoneCode : String) {
         self.defaultCountryPhoneCode = defaultCountryPhoneCode
-        super.init(tintColor: tintColor,
-                   textColor : textColor,
-                   parentViewColor : parentViewColor,
-                   defaultBorderColor: defaultBorderColor,
-                   errorColor: errorColor, validColor: validColor)
+        super.init()
     }
 }

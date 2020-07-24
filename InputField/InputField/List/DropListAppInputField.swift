@@ -55,6 +55,7 @@ open class DropListAppInputField : AppInputField {
     override func additionalSetUp() {
         super.additionalSetUp()
         
+        self.updatePlaceholder(showInTop: true,isValidationOn: false,isValid: true)
     }
     
     override func getConstraints() -> [NSLayoutConstraint] {
@@ -64,4 +65,8 @@ open class DropListAppInputField : AppInputField {
         return constraints
     }
     
+    override public func update(textColor : UIColor) {
+        super.update(textColor: textColor)
+        self.inputLabel.textColor = textColor
+    }
 }

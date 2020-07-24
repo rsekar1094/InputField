@@ -18,12 +18,11 @@ public enum AppInputFieldType : Int {
 }
 
 // MARK: - AppInputFieldTableViewCell
-open class AppInputFieldTableViewCell : BaseTableViewCell {
+open class AppInputFieldTableViewCell : InputFieldBaseTableViewCell {
     
     // MARK: - Properties
     internal var type : AppInputFieldType { return .textField }
-    internal weak var inputFieldView : AppInputField?
-    internal var configuration : Configuration { return Configuration()  }
+    open weak var inputFieldView : AppInputField?
     
     // MARK: - Initi
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -47,21 +46,29 @@ open class AppInputFieldTableViewCell : BaseTableViewCell {
         let view : AppInputField
         switch type {
         case .textField:
-            view = AppTextField(configuration: configuration)
+            view = AppTextField()
         case .phoneField:
-            view = AppPhoneTextField(configuration: configuration)
+            view = AppPhoneTextField()
         case .passwordField:
-            view = AppPasswordTextField(configuration: configuration)
+            view = AppPasswordTextField()
         case .list:
-            view = AppListInputField(configuration : configuration)
+            view = AppListInputField()
         case .arrowList:
-            view = DropListAppInputField(configuration : configuration)
+            view = DropListAppInputField()
         }
         
         view.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(view)
         view.g_pinEdges()
         self.inputFieldView = view
+    }
+    
+    public func updateOnCellConfigure(errorMessage : String?,canShowValidationResult : Bool) {
+        inputFieldView?.updateOnConfigure(errorMessage: errorMessage, canShowValidationResult: canShowValidationResult)
+    }
+    
+    public func update(tag : Int) {
+        self.inputFieldView?.tag = tag
     }
     
     override public func prepareForReuse() {

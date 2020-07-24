@@ -8,9 +8,9 @@
 
 import UIKit
 
-// MARK: - ListInputProtocol
-public protocol ListInputProtocol : AppInputFieldProtocol {
-    func didSelectItem(forList : AppListInputField,at : Int,value : String)
+// MARK: - AppListInputProtocol
+public protocol AppListInputProtocol : AppInputFieldProtocol {
+    func didSelectItem(inputField : AppListInputField,at : Int,value : String)
 }
 
 // MARK: - AppListInputField
@@ -43,9 +43,9 @@ open class AppListInputField : AppInputField,UICollectionViewDelegate,UICollecti
     }
     private var totalItemWidth : CGFloat = 0
     private var itemWidth : [CGFloat] = []
-    var delegate : ListInputProtocol? {
+    var delegate : AppListInputProtocol? {
         get {
-            return inputDelegate as? ListInputProtocol
+            return inputDelegate as? AppListInputProtocol
         }
         set {
             inputDelegate = newValue
@@ -60,7 +60,8 @@ open class AppListInputField : AppInputField,UICollectionViewDelegate,UICollecti
     override var isValid : Bool {
         return !(self.inputCollectionView.indexPathsForSelectedItems ?? []).isEmpty
     }
-        
+    public var listConfiguration : ListFieldConfiguration? { return (configuration as? ListFieldConfiguration)  }
+    
     // MARK: - Override methods
     override func addSubViews() {
         super.addSubViews()
@@ -75,12 +76,12 @@ open class AppListInputField : AppInputField,UICollectionViewDelegate,UICollecti
         inputCollectionView.dataSource = self
         inputCollectionView.allowsMultipleSelection = false
         inputCollectionView.allowsSelection = true
+        self.updatePlaceholder(showInTop: true,isValidationOn: false,isValid: false)
     }
     
     public func select(at : Int) {
         let selectedIndexPath = IndexPath(item: at, section: 0)
         self.inputCollectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .centeredHorizontally)
-        didShowAllTextFieldError()
     }
     
     // MARK: - UICollectionViewDelegate
@@ -90,12 +91,12 @@ open class AppListInputField : AppInputField,UICollectionViewDelegate,UICollecti
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeue(ListInputCell.self, for: indexPath)
-        cell.update(text : items[indexPath.item],font : listCellFont, configuration: (self.configuration as? ListConfiguration) ?? ListConfiguration())
+        cell.update(text : items[indexPath.item],font : listCellFont, configuration: self.listConfiguration ?? ListFieldConfiguration())
         return cell
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.didSelectItem(forList : self,at : indexPath.item,value : items[indexPath.item])
+        delegate?.didSelectItem(inputField : self,at : indexPath.item,value : items[indexPath.item])
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -111,4 +112,8 @@ open class AppListInputField : AppInputField,UICollectionViewDelegate,UICollecti
         }
     }
     
+    public func update(listUnSelectedColor : UIColor) {
+        listConfiguration?.listUnSelectedColor = listUnSelectedColor
+        self.inputCollectionView.reloadData()
+    }
 }

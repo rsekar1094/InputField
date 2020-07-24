@@ -7,21 +7,30 @@
 //
 
 import UIKit
-import AMPopTip
 
 // MARK: - AppInputFieldProtocol
 public protocol AppInputFieldProtocol : class {
     var showPossibleErrorForAll : Bool { get }
-}
-
-extension AppInputFieldProtocol {
-    var showPossibleErrorForAll : Bool { return false }
+    var inputFieldController : UIViewController { get }
+    
+    func reloadNeed(for inputField : AppInputField)
+    func canShowValidationResult(inputField : AppInputField) -> Bool
 }
 
 // MARK: - AppInputField
 open class AppInputField : UIView {
     
     // MARK: - Properties
+    internal lazy var verticalContainerView : UIStackView = {
+        let containerView = UIStackView()
+        containerView.axis = .vertical
+        containerView.spacing = 5
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.distribution = .fill
+        containerView.alignment = .fill
+        return containerView
+    }()
+    
     internal lazy var borderView : UIView = {
         let borderView = UIView()
         borderView.translatesAutoresizingMaskIntoConstraints = false
@@ -35,6 +44,7 @@ open class AppInputField : UIView {
     internal lazy var containerView : UIStackView = {
         let containerView = UIStackView()
         containerView.axis = .horizontal
+        containerView.spacing = 2
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.distribution = .fill
         containerView.alignment = .fill
@@ -44,9 +54,18 @@ open class AppInputField : UIView {
     internal lazy var placeholderLabel : UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = configuration.placeholderFont
+        label.isUserInteractionEnabled = false
+        label.textColor = self.configuration.placehoderColor
+        return label
+    }()
+    
+    internal lazy var bottomErrorLabel : UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12, weight: .light)
-        label.layer.cornerRadius = 5
-        label.textColor = borderColor
+        label.textColor = self.configuration.errorColor
+        label.numberOfLines = 0
         return label
     }()
     
@@ -63,29 +82,26 @@ open class AppInputField : UIView {
         return resultImageView
     }()
     
-    private lazy var hideBorderView : UIView = {
+    internal lazy var hideBorderView : UIView = {
         let hideBorderView = UIView()
         hideBorderView.translatesAutoresizingMaskIntoConstraints = false
+        hideBorderView.alpha = 0
+        hideBorderView.isUserInteractionEnabled = false
         hideBorderView.backgroundColor = self.configuration.parentViewColor
         return hideBorderView
     }()
     
-    private weak var popTip : PopTip?
-    
     internal weak var inputDelegate : AppInputFieldProtocol?
     
-    public var needResultImageView : Bool = true {
-        didSet {
-            if !needResultImageView {
-                resultImageView.isHidden = true
-            }
-        }
-    }
     internal var stackViewLeftMargin : CGFloat { return 15 }
     internal var stackViewRightMargin : CGFloat { return 15 }
-    internal var placeholderLeftMargin : CGFloat { return 10 }
+    internal var placeholderLeftMargin : CGFloat { return 15 }
     internal var borderColor : UIColor {
-        return configuration.defaultBorderColor
+        if isInputFocused {
+            return configuration.focusedColor
+        } else {
+            return configuration.unfocusedColor
+        }
     }
     
     public var parentViewColor : UIColor = .white {
@@ -95,24 +111,32 @@ open class AppInputField : UIView {
     }
     
     internal var isValid : Bool { return false }
+    internal var isInputFocused : Bool { return self.isFirstResponder }
     
-    internal let configuration : Configuration
-
+    internal let configuration : InputFieldConfiguration
+    internal weak var placeholderYAnchor : NSLayoutConstraint?
+    
+    internal var isValidationOn : Bool {
+        let showAllpossibleError = (self.inputDelegate?.showPossibleErrorForAll ?? false)
+        let canShowValidationForCurrentField = self.inputDelegate?.canShowValidationResult(inputField: self) ??  true
+        return showAllpossibleError || canShowValidationForCurrentField
+    }
+    
     // MARK: - Life cycle methods
     override public init(frame : CGRect) {
-        self.configuration = Configuration()
+        self.configuration = InputFieldConfiguration()
         super.init(frame: frame)
         setUp()
     }
     
     required public init?(coder: NSCoder) {
-        self.configuration = Configuration()
+        self.configuration = InputFieldConfiguration()
         super.init(coder: coder)
         
         setUp()
     }
     
-    public init(configuration : Configuration) {
+    public init(configuration : InputFieldConfiguration) {
         self.configuration = configuration
         super.init(frame: .zero)
         
@@ -121,27 +145,23 @@ open class AppInputField : UIView {
     
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        
-        if resultImageView.image != nil {
-            if isValid {
-                borderView.layer.borderColor = borderColor.cgColor
-            } else {
-                borderView.layer.borderColor = UIColor.red.cgColor
-            }
-        } else {
-            borderView.layer.borderColor = borderColor.cgColor
-        }
+        updateborder(isValidationOn: isValidationOn, isValid: isValid)
     }
     
     // MARK: - Setup
     private func setUp() {
         self.backgroundColor = .clear
         addSubViews()
-        NSLayoutConstraint.activate(getConstraints())
+        let placeholderYAnchor = placeholderLabel.centerYAnchor.constraint(equalTo: borderView.centerYAnchor)
+        var constraints = getConstraints()
+        constraints.append(placeholderYAnchor)
+        NSLayoutConstraint.activate(constraints)
+        self.placeholderYAnchor = placeholderYAnchor
         additionalSetUp()
         
         self.parentViewColor = configuration.parentViewColor
         NotificationCenter.default.addObserver(self, selector: #selector(didShowAllTextFieldError), name: .showAllFieldErrors, object: nil)
+        updateErrorState()
     }
     
     deinit {
@@ -152,121 +172,45 @@ open class AppInputField : UIView {
         
     }
     
-    internal func setPlacehoder(_ placehoder : String) {
-        placeholderLabel.text = " \(placehoder) "
-    }
-    
-    @objc
-    public func didShowAllTextFieldError() {
-        if let delegate = self.inputDelegate,delegate.showPossibleErrorForAll {
-            if isValid {
-                borderView.layer.borderColor = configuration.tintColor.cgColor
-            } else {
-                borderView.layer.borderColor = UIColor.red.cgColor
-            }
-        }
-    }
-    
     // MARK: - Action methods
     @objc
+    private func didShowAllTextFieldError() {
+        updateborder(isValidationOn: isValidationOn, isValid: isValid)
+    }
+    
+    @objc
     private func didPressStatusView() {
-        if let _ = popTip {
-            hideErrorTip()
-            return
-        }
-        
         guard let errorMessage = self.errorText else {
             return
         }
         
-        let popTip = PopTip()
-        let rect = CGRect(origin: CGPoint(x: resultImageView.frame.center.x, y: borderView.frame.center.y - (borderView.frame.height / 2)), size: resultImageView.frame.size)
-        popTip.show(text: errorMessage, direction: .autoHorizontal, maxWidth: borderView.frame.width - 100, in: self, from:  rect)
-        self.popTip = popTip
-    }
-    
-    // MARK: - View Methods
-    internal func addSubViews() {
-        self.addSubview(borderView)
-        borderView.addSubview(containerView)
-        self.addSubview(hideBorderView)
-        self.addSubview(placeholderLabel)
-    }
-    
-    internal func getConstraints() -> [NSLayoutConstraint] {
-        var constraints : [NSLayoutConstraint] = []
-        
-        //borderView
-        constraints.append(borderView.heightAnchor.constraint(equalToConstant: 42))
-        constraints.append(borderView.leadingAnchor.constraint(equalTo: self.leadingAnchor,constant: 10))
-        constraints.append(borderView.trailingAnchor.constraint(equalTo: self.trailingAnchor,constant: -10))
-        constraints.append(borderView.bottomAnchor.constraint(equalTo: self.bottomAnchor,constant: -5))
-        
-        //containerView
-        constraints.append(containerView.heightAnchor.constraint(equalToConstant: 40))
-        constraints.append(containerView.centerYAnchor.constraint(equalTo: borderView.centerYAnchor))
-        constraints.append(containerView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor,constant: stackViewLeftMargin))
-        constraints.append(containerView.trailingAnchor.constraint(equalTo: borderView.trailingAnchor,constant: -stackViewRightMargin))
-        
-        //placeholderLabel
-        constraints.append(placeholderLabel.bottomAnchor.constraint(equalTo: borderView.topAnchor,constant: 5))
-        constraints.append(placeholderLabel.leftAnchor.constraint(equalTo: borderView.leftAnchor,constant: placeholderLeftMargin))
-        constraints.append(placeholderLabel.topAnchor.constraint(equalTo: self.topAnchor,constant: 5))
-    
-        //hideBorderView
-        constraints.append(hideBorderView.topAnchor.constraint(equalTo: borderView.topAnchor))
-        constraints.append(hideBorderView.leadingAnchor.constraint(equalTo: placeholderLabel.leadingAnchor))
-        constraints.append(hideBorderView.trailingAnchor.constraint(equalTo: placeholderLabel.trailingAnchor))
-        constraints.append(hideBorderView.heightAnchor.constraint(equalToConstant: 1))
-        
-        return constraints
-    }
-
-    internal func updatePlaceholder(show : Bool,animate : Bool = true) {
-        let alpha : CGFloat
-        if show {
-            alpha = 1
-        } else {
-            alpha = 0
-        }
-        if placeholderLabel.alpha != alpha {
-            if animate {
-                UIView.animate(withDuration: 0.4, animations: {
-                    self.placeholderLabel.alpha = alpha
-                    self.hideBorderView.alpha = alpha
-                })
-            } else {
-                self.placeholderLabel.alpha = alpha
-                self.hideBorderView.alpha = alpha
-            }
-        }
-    }
-    
-    internal func updateError(show : Bool,
-                              errorMessage : String?) {
-        guard needResultImageView else {
-            resultImageView.isHidden = true
+        guard let controller = self.inputDelegate?.inputFieldController else {
             return
         }
-        resultImageView.isHidden = false
-        if show {
-            self.resultImageView.image = UIImage.get(.close)?.withRenderingMode(.alwaysTemplate)
-            self.resultImageView.tintColor = configuration.errorColor
-            self.borderView.layer.borderColor = configuration.errorColor.cgColor
-        } else {
-            self.resultImageView.image = UIImage.get(.tickMark)?.withRenderingMode(.alwaysTemplate)
-            self.resultImageView.tintColor = configuration.validColor
-            self.borderView.layer.borderColor = borderColor.cgColor
+        
+        TextPopOverController.present(text: errorMessage,
+                                      configuration : self.configuration,
+                                      sourceView: self.resultImageView, presentingController: controller, dismissCompletion: nil)
+    }
+    
+    internal func updateErrorState() {
+        switch configuration.errorShowType {
+        case .inside:
+            bottomErrorLabel.isHidden = true
+            bottomErrorLabel.text = ""
+        case .outsideDownLeft,.outsideDownRight:
+            if errorText?.isEmpty ?? true {
+                bottomErrorLabel.isHidden = true
+                bottomErrorLabel.text = ""
+            } else {
+                bottomErrorLabel.isHidden = false
+                bottomErrorLabel.text = errorText
+            }
+            if configuration.errorShowType == .outsideDownRight {
+                bottomErrorLabel.textAlignment = .right
+            } else {
+                bottomErrorLabel.textAlignment = .left
+            }
         }
-        self.errorText = errorMessage
-    }
-    
-    func hideErrorTip() {
-        popTip?.hide()
-        popTip = nil
-    }
-    
-    func prepareForReuse() {
-        borderView.layer.borderColor = borderColor.cgColor
     }
 }

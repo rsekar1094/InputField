@@ -8,17 +8,17 @@
 
 import UIKit
 
-public enum CellAdjustInset {
+public enum InputFieldCellAdjustInset {
     case left
     case right
     case bothLeftRight
     case none
 }
 
-open class BaseTableViewCell: UITableViewCell {
+open class InputFieldBaseTableViewCell: UITableViewCell {
 
     weak var baseView : UIView?
-    var cellInset : CellAdjustInset = .none
+    var cellInset : InputFieldCellAdjustInset = .none
     private static let offsetWidth : CGFloat = 400
     private static let offsetMargin : CGFloat = 40
     
@@ -32,14 +32,14 @@ open class BaseTableViewCell: UITableViewCell {
     override public func layoutSubviews() {
         super.layoutSubviews()
         
-        let insets = BaseTableViewCell.getEdgeInset(width : self.frame.width,cellInset : cellInset)
+        let insets = InputFieldBaseTableViewCell.getEdgeInset(width : self.frame.width,cellInset : cellInset)
         if let baseView = baseView,baseView.layoutMargins != insets {
             baseView.layoutMargins = insets
         }
         
     }
     
-    public static func getEdgeInset(width : CGFloat,cellInset : CellAdjustInset) -> UIEdgeInsets {
+    public static func getEdgeInset(width : CGFloat,cellInset : InputFieldCellAdjustInset) -> UIEdgeInsets {
         let currentWidth = width
         let requiredWidth = currentWidth * 0.8
         

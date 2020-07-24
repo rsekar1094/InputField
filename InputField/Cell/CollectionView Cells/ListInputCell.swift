@@ -20,7 +20,7 @@ class ListInputCell : UICollectionViewCell {
         return label
     }()
     
-    private var configuration = ListConfiguration()
+    private var configuration = ListFieldConfiguration()
     
     required init?(coder: NSCoder) {
         super.init(coder : coder)
@@ -42,7 +42,7 @@ class ListInputCell : UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             if isSelected {
-                label.backgroundColor = configuration.tintColor
+                label.backgroundColor = configuration.focusedColor
             } else {
                 label.backgroundColor = configuration.listUnSelectedColor
             }
@@ -55,7 +55,7 @@ class ListInputCell : UICollectionViewCell {
         label.g_pinEdges(inset : UIEdgeInsets.init(top: 8, left: 10, bottom: -8, right: -10))
     }
     
-    public func update(text : String,font : UIFont,configuration : ListConfiguration) {
+    public func update(text : String,font : UIFont,configuration : ListFieldConfiguration) {
         self.configuration = configuration
         label.text = text
         label.font = font

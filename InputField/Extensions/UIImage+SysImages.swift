@@ -6,8 +6,7 @@
 //  Copyright © 2020 Apple. All rights reserved.
 //
 
-import Foundation
-import Gridicons
+import UIKit
 
 enum IconType : Int {
     case tickMark
@@ -25,31 +24,31 @@ extension UIImage {
             if #available(iOS 13.0, *) {
                 return UIImage(systemName: "checkmark")
             } else {
-                return UIImage.gridicon(.checkmark)
+                return UIImage.init(named : "checkmark")
             }
         case .dropArrow:
             if #available(iOS 13.0, *) {
                 return UIImage(systemName: "chevron.down")
             } else {
-                return UIImage.gridicon(.chevronDown)
+                return UIImage.init(named : "dropArrow")
             }
         case .eye:
             if #available(iOS 13.0, *) {
                 return UIImage(systemName: "eye.fill")
             } else {
-                return UIImage.gridicon(.visible)
+                return UIImage.init(named : "eye")
             }
         case .eyeSlash:
             if #available(iOS 13.0, *) {
                 return UIImage(systemName: "eye.slash.fill")
             } else {
-                return UIImage.gridicon(.notVisible)
+                return UIImage.init(named : "eyeSlash")
             }
         case .close:
             if #available(iOS 13.0, *) {
                 return UIImage(systemName: "xmark")
             } else {
-                return UIImage.gridicon(.cross)
+                return UIImage.init(named : "close")
             }
         }
     }

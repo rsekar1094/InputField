@@ -15,12 +15,14 @@ open class AppTextFieldTableViewCell: AppInputFieldTableViewCell {
     
     public func update(placeholder : String,
                        text : String?,
+                       isValidationOn : Bool,
+                       isValid : Bool,
                        delegate : AppTextFieldProtocol?) {
         self.textField?.delegate = delegate
         self.textField?.text = text
-        self.textField?.setPlacehoder(placeholder)
+        self.textField?.update(placeholder : placeholder)
         if !(text?.isEmpty ?? true) {
-            textField?.updatePlaceholder(show: true, animate: false)
+            textField?.updatePlaceholder(showInTop: true,isValidationOn : isValidationOn,isValid : isValid,animate: false)
         }
     }
     
@@ -36,12 +38,8 @@ open class AppTextFieldTableViewCell: AppInputFieldTableViewCell {
         textField?.textField.returnKeyType = returnType
     }
     
-    public func update(needResultImageView : Bool) {
-        textField?.needResultImageView = needResultImageView
-    }
-    
     public func update(isOptional : Bool) {
-        textField?.isOptional = isOptional
+        textField?.update(isOptional: isOptional)
     }
 }
 
@@ -58,16 +56,19 @@ open class AppPhoneNumberTableViewCell: AppTextFieldTableViewCell {
     
     public func update(placeholder : String,
                        text : String,
+                       isValidationOn : Bool,
+                       isValid : Bool,
                        phoneDelegate : PhoneTextFieldProtocol?) {
-        update(placeholder: placeholder, text: text, delegate: phoneDelegate)
+        update(placeholder: placeholder, text: text,isValidationOn : isValidationOn,isValid : isValid,delegate: phoneDelegate)
     }
     
     public func update(countryCode : String) {
         (self.inputFieldView as? AppPhoneTextField)?.update(countryCode : countryCode)
     }
     
-    override public func update(placeholder: String, text: String?, delegate: AppTextFieldProtocol?) {
-        super.update(placeholder: placeholder, text: text, delegate: delegate)
+    override public func update(placeholder: String, text: String?,
+                                isValidationOn : Bool,isValid : Bool, delegate: AppTextFieldProtocol?) {
+        super.update(placeholder: placeholder, text: text,isValidationOn : isValidationOn,isValid : isValid, delegate: delegate)
     }
 }
 
@@ -81,10 +82,10 @@ open class AppListTableViewCell: AppInputFieldTableViewCell {
     public func update(placeholder : String,
                        items : [String],
                        selectedPosition : Int?,
-                       delegate : ListInputProtocol?) {
+                       delegate : AppListInputProtocol?) {
         self.listView?.delegate = delegate
         self.listView?.items = items
-        self.listView?.setPlacehoder(placeholder)
+        self.listView?.update(placeholder : placeholder)
         if let selectedPosition = selectedPosition {
             DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: {
                 self.listView?.select(at : selectedPosition)
@@ -104,7 +105,7 @@ open class AppDropListTableViewCell: AppInputFieldTableViewCell {
     public func update(placeholder : String,text : String?,delegate : AppInputFieldProtocol? = nil) {
         self.listView?.text = text
         self.listView?.inputDelegate = delegate
-        self.listView?.setPlacehoder(placeholder)
+        self.listView?.update(placeholder : placeholder)
     }
 }
 

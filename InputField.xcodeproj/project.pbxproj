@@ -25,13 +25,19 @@
 		1802D75824C8072200305BA5 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1802D75724C8072200305BA5 /* UIView+Extensions.swift */; };
 		1802D75A24C8073900305BA5 /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1802D75924C8073900305BA5 /* CGRect+Extension.swift */; };
 		1802D75C24C808D300305BA5 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1802D75B24C808D300305BA5 /* Configuration.swift */; };
-		F016B73C282F846C13BDDA4F /* Pods_InputField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7FC092B6E5D13DF23EAD8CF6 /* Pods_InputField.framework */; };
+		1895CEB224CAD8E900109AE7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1895CEB124CAD8E800109AE7 /* Images.xcassets */; };
+		1895CEB524CAE17200109AE7 /* TextPopOverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CEB424CAE17200109AE7 /* TextPopOverController.swift */; };
+		1895CF7724CC3B0300109AE7 /* AppInputField+ViewSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CF7624CC3B0300109AE7 /* AppInputField+ViewSetup.swift */; };
+		1895CF7924CC3B5300109AE7 /* AppInputField+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CF7824CC3B5300109AE7 /* AppInputField+Configuration.swift */; };
+		1895CF7B24CC3B9D00109AE7 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CF7A24CC3B9D00109AE7 /* UILabel+Extension.swift */; };
+		1895CF7D24CC3BDE00109AE7 /* AppInputField+Borders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CF7C24CC3BDE00109AE7 /* AppInputField+Borders.swift */; };
+		1895CF7F24CC3BF500109AE7 /* AppInputField+Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CF7E24CC3BF500109AE7 /* AppInputField+Placeholder.swift */; };
+		1895CF8124CC3C7C00109AE7 /* AppInputField+Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1895CF8024CC3C7C00109AE7 /* AppInputField+Error.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1802D72524C8031400305BA5 /* InputField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = InputField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1802D72824C8031400305BA5 /* InputField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InputField.h; sourceTree = "<group>"; };
-		1802D72924C8031400305BA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1802D73124C8036A00305BA5 /* AppInputField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppInputField.swift; sourceTree = "<group>"; };
 		1802D73324C8036A00305BA5 /* AppTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppTextField.swift; sourceTree = "<group>"; };
 		1802D73424C8036A00305BA5 /* AppPhoneTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppPhoneTextField.swift; sourceTree = "<group>"; };
@@ -49,9 +55,14 @@
 		1802D75724C8072200305BA5 /* UIView+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		1802D75924C8073900305BA5 /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		1802D75B24C808D300305BA5 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
-		7FC092B6E5D13DF23EAD8CF6 /* Pods_InputField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_InputField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC816BED599C9BC069CE3746 /* Pods-InputField.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InputField.release.xcconfig"; path = "Target Support Files/Pods-InputField/Pods-InputField.release.xcconfig"; sourceTree = "<group>"; };
-		BD64DF1DB6E3F9BDE3111E6D /* Pods-InputField.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InputField.debug.xcconfig"; path = "Target Support Files/Pods-InputField/Pods-InputField.debug.xcconfig"; sourceTree = "<group>"; };
+		1895CEB124CAD8E800109AE7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		1895CEB424CAE17200109AE7 /* TextPopOverController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPopOverController.swift; sourceTree = "<group>"; };
+		1895CF7624CC3B0300109AE7 /* AppInputField+ViewSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppInputField+ViewSetup.swift"; sourceTree = "<group>"; };
+		1895CF7824CC3B5300109AE7 /* AppInputField+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppInputField+Configuration.swift"; sourceTree = "<group>"; };
+		1895CF7A24CC3B9D00109AE7 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
+		1895CF7C24CC3BDE00109AE7 /* AppInputField+Borders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppInputField+Borders.swift"; sourceTree = "<group>"; };
+		1895CF7E24CC3BF500109AE7 /* AppInputField+Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppInputField+Placeholder.swift"; sourceTree = "<group>"; };
+		1895CF8024CC3C7C00109AE7 /* AppInputField+Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppInputField+Error.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,29 +70,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F016B73C282F846C13BDDA4F /* Pods_InputField.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0FFECDA40C614D14B97DA046 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				BD64DF1DB6E3F9BDE3111E6D /* Pods-InputField.debug.xcconfig */,
-				AC816BED599C9BC069CE3746 /* Pods-InputField.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		1802D71B24C8031400305BA5 = {
 			isa = PBXGroup;
 			children = (
 				1802D72724C8031400305BA5 /* InputField */,
 				1802D72624C8031400305BA5 /* Products */,
-				0FFECDA40C614D14B97DA046 /* Pods */,
-				B98591FF919CACAC80BEC290 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -96,13 +95,14 @@
 		1802D72724C8031400305BA5 /* InputField */ = {
 			isa = PBXGroup;
 			children = (
+				1895CEB324CAE16600109AE7 /* Controllers */,
 				1802D75424C806DE00305BA5 /* Helpers */,
 				1802D74724C8055500305BA5 /* Extensions */,
 				1802D73024C8036A00305BA5 /* InputField */,
 				1802D74624C8054400305BA5 /* Cell */,
 				1802D72824C8031400305BA5 /* InputField.h */,
-				1802D72924C8031400305BA5 /* Info.plist */,
 				1802D75B24C808D300305BA5 /* Configuration.swift */,
+				1895CEB124CAD8E800109AE7 /* Images.xcassets */,
 			);
 			path = InputField;
 			sourceTree = "<group>";
@@ -111,6 +111,11 @@
 			isa = PBXGroup;
 			children = (
 				1802D73124C8036A00305BA5 /* AppInputField.swift */,
+				1895CF7C24CC3BDE00109AE7 /* AppInputField+Borders.swift */,
+				1895CF7E24CC3BF500109AE7 /* AppInputField+Placeholder.swift */,
+				1895CF8024CC3C7C00109AE7 /* AppInputField+Error.swift */,
+				1895CF7624CC3B0300109AE7 /* AppInputField+ViewSetup.swift */,
+				1895CF7824CC3B5300109AE7 /* AppInputField+Configuration.swift */,
 				1802D73224C8036A00305BA5 /* TextField */,
 				1802D73624C8036A00305BA5 /* List */,
 			);
@@ -162,6 +167,7 @@
 				1802D75224C806BF00305BA5 /* String+Extensions.swift */,
 				1802D74A24C805E100305BA5 /* UITableView+Extensions.swift */,
 				1802D74824C805D600305BA5 /* UIImage+SysImages.swift */,
+				1895CF7A24CC3B9D00109AE7 /* UILabel+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -191,12 +197,12 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		B98591FF919CACAC80BEC290 /* Frameworks */ = {
+		1895CEB324CAE16600109AE7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				7FC092B6E5D13DF23EAD8CF6 /* Pods_InputField.framework */,
+				1895CEB424CAE17200109AE7 /* TextPopOverController.swift */,
 			);
-			name = Frameworks;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -217,7 +223,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1802D72D24C8031400305BA5 /* Build configuration list for PBXNativeTarget "InputField" */;
 			buildPhases = (
-				E858DD95A6D9545871758C1F /* [CP] Check Pods Manifest.lock */,
 				1802D72024C8031400305BA5 /* Headers */,
 				1802D72124C8031400305BA5 /* Sources */,
 				1802D72224C8031400305BA5 /* Frameworks */,
@@ -269,45 +274,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1895CEB224CAD8E900109AE7 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E858DD95A6D9545871758C1F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-InputField-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1802D72124C8031400305BA5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1895CF7924CC3B5300109AE7 /* AppInputField+Configuration.swift in Sources */,
+				1895CF7724CC3B0300109AE7 /* AppInputField+ViewSetup.swift in Sources */,
 				1802D73924C8036A00305BA5 /* AppInputField.swift in Sources */,
 				1802D73A24C8036A00305BA5 /* AppTextField.swift in Sources */,
 				1802D75624C806F200305BA5 /* NotificationKey.swift in Sources */,
+				1895CF7D24CC3BDE00109AE7 /* AppInputField+Borders.swift in Sources */,
+				1895CF8124CC3C7C00109AE7 /* AppInputField+Error.swift in Sources */,
 				1802D74F24C8067000305BA5 /* ListInputCell.swift in Sources */,
+				1895CEB524CAE17200109AE7 /* TextPopOverController.swift in Sources */,
 				1802D73C24C8036A00305BA5 /* AppPasswordTextField.swift in Sources */,
 				1802D74924C805D600305BA5 /* UIImage+SysImages.swift in Sources */,
 				1802D75824C8072200305BA5 /* UIView+Extensions.swift in Sources */,
@@ -315,8 +301,10 @@
 				1802D74524C803E100305BA5 /* BaseTableViewCell.swift in Sources */,
 				1802D73D24C8036A00305BA5 /* DropListAppInputField.swift in Sources */,
 				1802D75324C806BF00305BA5 /* String+Extensions.swift in Sources */,
+				1895CF7F24CC3BF500109AE7 /* AppInputField+Placeholder.swift in Sources */,
 				1802D75C24C808D300305BA5 /* Configuration.swift in Sources */,
 				1802D74B24C805E100305BA5 /* UITableView+Extensions.swift in Sources */,
+				1895CF7B24CC3B9D00109AE7 /* UILabel+Extension.swift in Sources */,
 				1802D75A24C8073900305BA5 /* CGRect+Extension.swift in Sources */,
 				1802D73E24C8036A00305BA5 /* ListAppInputField.swift in Sources */,
 				1802D74324C8039400305BA5 /* AppInputFieldTableViewCell.swift in Sources */,
@@ -449,7 +437,6 @@
 		};
 		1802D72E24C8031400305BA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BD64DF1DB6E3F9BDE3111E6D /* Pods-InputField.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -475,7 +462,6 @@
 		};
 		1802D72F24C8031400305BA5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC816BED599C9BC069CE3746 /* Pods-InputField.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

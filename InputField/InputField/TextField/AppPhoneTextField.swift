@@ -10,7 +10,7 @@ import UIKit
 
 // MARK: - AppTextFieldProtocol
 public protocol PhoneTextFieldProtocol : AppTextFieldProtocol {
-    func didPressCountryLabel(textField : UITextField)
+    func didPressCountryLabel(inputField : AppPhoneTextField)
 }
 
 open class AppPhoneTextField : AppTextField {
@@ -21,7 +21,7 @@ open class AppPhoneTextField : AppTextField {
         countryLabel.backgroundColor = .clear
         countryLabel.textColor = self.configuration.textColor
         countryLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        countryLabel.text = (self.configuration as? PhoneConfiguration)?.defaultCountryPhoneCode
+        countryLabel.text = phoneConfiguration?.defaultCountryPhoneCode
         countryLabel.textAlignment = .center
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didPressCountryLabel))
         countryLabel.isUserInteractionEnabled = true
@@ -35,21 +35,25 @@ open class AppPhoneTextField : AppTextField {
         view.backgroundColor = .clear
         
         let split = UIView()
+        split.tag = 343
         split.backgroundColor = borderColor
         split.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(split)
+        let splitViewWidthConstraint = split.widthAnchor.constraint(equalToConstant: 1)
         NSLayoutConstraint.activate([
             split.topAnchor.constraint(equalTo: view.topAnchor),
             split.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             split.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            split.widthAnchor.constraint(equalToConstant: 1)
+            splitViewWidthConstraint
         ])
-        
+        self.splitViewWidthConstraint = splitViewWidthConstraint
         return view
     }()
     
     override var stackViewLeftMargin : CGFloat { return 0 }
     override var placeholderLeftMargin : CGFloat { return 50 }
+    public var phoneConfiguration : PhoneFieldConfiguration? { return (configuration as? PhoneFieldConfiguration)  }
+    private weak var splitViewWidthConstraint : NSLayoutConstraint?
     
     // MARK: - Override methods
     override func addSubViews() {
@@ -74,14 +78,39 @@ open class AppPhoneTextField : AppTextField {
         textField.keyboardType = .phonePad
     }
     
+    override func updateborder(isValidationOn : Bool,isValid : Bool) {
+        super.updateborder(isValidationOn : isValidationOn,isValid : isValid)
+        
+        if isValidationOn {
+            if isValid {
+                separatorView.viewWithTag(343)?.backgroundColor = borderColor
+            } else {
+                separatorView.viewWithTag(343)?.backgroundColor = configuration.errorColor
+            }
+        } else {
+            separatorView.viewWithTag(343)?.backgroundColor = borderColor
+        }
+        
+        if self.isInputFocused {
+            splitViewWidthConstraint?.constant = 1.5
+        } else {
+            splitViewWidthConstraint?.constant = 0.5
+        }
+        separatorView.setNeedsLayout()
+        separatorView.layoutIfNeeded()
+    }
     // MARK: - Action methods
     @objc
     private func didPressCountryLabel() {
-        (self.delegate as? PhoneTextFieldProtocol)?.didPressCountryLabel(textField: self.textField)
+        (self.delegate as? PhoneTextFieldProtocol)?.didPressCountryLabel(inputField: self)
     }
     
-    func update(countryCode : String) {
+    func update(countryCode : String?) {
         self.countryLabel.text = countryCode
     }
     
+    public func update(defaultCountryPhoneCode : String) {
+        phoneConfiguration?.defaultCountryPhoneCode = defaultCountryPhoneCode
+        self.countryLabel.text = defaultCountryPhoneCode
+    }
 }
