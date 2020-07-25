@@ -27,7 +27,7 @@ extension AppInputField {
         var constant : CGFloat
         
         if showInTop {
-            constant = -20
+            constant = -(fieldHeight / 2)
         } else {
             constant = 0
         }

@@ -33,10 +33,10 @@ extension AppInputField {
         constraints.append(verticalBottomConstraint)
         
         //borderView
-        constraints.append(borderView.heightAnchor.constraint(equalToConstant: 42))
+        constraints.append(borderView.heightAnchor.constraint(equalToConstant: fieldHeight))
         
         //containerView
-        constraints.append(containerView.heightAnchor.constraint(equalToConstant: 40))
+        constraints.append(containerView.heightAnchor.constraint(equalToConstant: fieldHeight-2))
         constraints.append(containerView.centerYAnchor.constraint(equalTo: borderView.centerYAnchor))
         constraints.append(containerView.leadingAnchor.constraint(equalTo: borderView.leadingAnchor,constant: stackViewLeftMargin))
         constraints.append(containerView.trailingAnchor.constraint(equalTo: borderView.trailingAnchor,constant: -stackViewRightMargin))

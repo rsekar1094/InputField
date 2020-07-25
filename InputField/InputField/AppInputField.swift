@@ -93,6 +93,7 @@ open class AppInputField : UIView {
     
     internal weak var inputDelegate : AppInputFieldProtocol?
     
+    internal var fieldHeight : CGFloat { return 47 }
     internal var stackViewLeftMargin : CGFloat { return 15 }
     internal var stackViewRightMargin : CGFloat { return 15 }
     internal var placeholderLeftMargin : CGFloat { return 15 }
@@ -115,6 +116,7 @@ open class AppInputField : UIView {
     
     internal let configuration : InputFieldConfiguration
     internal weak var placeholderYAnchor : NSLayoutConstraint?
+    internal weak var inputFeildHeightConstraint : NSLayoutConstraint?
     
     internal var isValidationOn : Bool {
         let showAllpossibleError = (self.inputDelegate?.showPossibleErrorForAll ?? false)
