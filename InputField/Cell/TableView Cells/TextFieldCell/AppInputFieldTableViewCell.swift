@@ -20,6 +20,9 @@ public enum AppInputFieldType : Int {
 // MARK: - AppInputFieldTableViewCell
 open class AppInputFieldTableViewCell : InputFieldBaseTableViewCell {
     
+    private static var defaultConfiguration : InputFieldConfiguration?
+    
+    
     // MARK: - Properties
     internal var type : AppInputFieldType { return .textField }
     open weak var inputFieldView : AppInputField?
@@ -43,18 +46,20 @@ open class AppInputFieldTableViewCell : InputFieldBaseTableViewCell {
         self.backgroundColor = .clear
         self.contentView.backgroundColor = .clear
         
+        let defaultConfiguration  : InputFieldConfiguration = AppInputFieldTableViewCell.defaultConfiguration ?? InputFieldConfiguration()
+        
         let view : AppInputField
         switch type {
         case .textField:
-            view = AppTextField()
+            view = AppTextField(configuration: defaultConfiguration)
         case .phoneField:
-            view = AppPhoneTextField()
+            view = AppPhoneTextField(configuration : defaultConfiguration)
         case .passwordField:
-            view = AppPasswordTextField()
+            view = AppPasswordTextField(configuration : defaultConfiguration)
         case .list:
-            view = AppListInputField()
+            view = AppListInputField(configuration : defaultConfiguration)
         case .arrowList:
-            view = DropListAppInputField()
+            view = DropListAppInputField(configuration : defaultConfiguration)
         }
         
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -75,5 +80,9 @@ open class AppInputFieldTableViewCell : InputFieldBaseTableViewCell {
         super.prepareForReuse()
         
         inputFieldView?.prepareForReuse()
+    }
+    
+    public static func setDefaultConfiguration(_ defaultConfiguration : InputFieldConfiguration?) {
+        AppInputFieldTableViewCell.defaultConfiguration = defaultConfiguration
     }
 }

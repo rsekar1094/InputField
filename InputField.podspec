@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "InputField"
-  s.version      = "0.0.3"
+  s.version      = "0.0.4"
   s.summary      = "Contains all possible input fields"
   s.description  = "Have different input fields like Text,password,phone number,list and drop down and can use those inside a cell too"
   s.homepage     = "https://github.com/rsekar1094"

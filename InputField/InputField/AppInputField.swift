@@ -93,7 +93,7 @@ open class AppInputField : UIView {
     
     internal weak var inputDelegate : AppInputFieldProtocol?
     
-    internal var fieldHeight : CGFloat { return 47 }
+    internal var fieldHeight : CGFloat { return configuration.fieldHeight }
     internal var stackViewLeftMargin : CGFloat { return 15 }
     internal var stackViewRightMargin : CGFloat { return 15 }
     internal var placeholderLeftMargin : CGFloat { return 15 }

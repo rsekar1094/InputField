@@ -16,6 +16,15 @@ class ViewController: UITableViewController {
         
         self.tableView.separatorStyle = .none
         self.tableView.tableFooterView = UIView()
+        
+        let configuration = InputFieldConfiguration()
+        configuration.errorColor = .brown
+        configuration.focusedColor = .red
+        configuration.errorShowType = .outsideDownLeft
+        configuration.textColor = .black
+        configuration.fieldHeight = 47
+        AppInputFieldTableViewCell.setDefaultConfiguration(configuration)
+        
         self.tableView.register(AppTextFieldTableViewCell.self)
         self.tableView.register(AppPasswordFieldTableViewCell.self)
         self.tableView.register(AppPhoneNumberTableViewCell.self)

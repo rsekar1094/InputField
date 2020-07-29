@@ -23,7 +23,7 @@ open class InputFieldConfiguration {
     public var parentViewColor : UIColor = UIColor.white
     public var errorColor : UIColor = UIColor.red
     public var validColor : UIColor = UIColor.green
-    public var errorShowType : ErrorShowType = .inside
+    public var errorShowType : ErrorShowType = .outsideDownLeft
     
     public var isOptional : Bool = false
     public var placeholder : String = ""
@@ -31,6 +31,8 @@ open class InputFieldConfiguration {
     public var placeholderFont : UIFont = UIFont.systemFont(ofSize: 16, weight: .regular)
     public var focusedPlaceholderFont : UIFont = UIFont.systemFont(ofSize: 12, weight: .regular)
     public var placehoderColor : UIColor = UIColor.darkGray.withAlphaComponent(0.5)
+    
+    public var fieldHeight : CGFloat = 47
     
     public init() {
         
